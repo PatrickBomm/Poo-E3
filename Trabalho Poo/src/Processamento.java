@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 public class Processamento {
     private String dataExtracao;
     private String dataObito;
@@ -19,6 +17,7 @@ public class Processamento {
         this.obitoPrematuro = obitoPrematuro;
         this.tipoObito = tipoObito;
     }
+    
 
     public String getDataExtracao() {
         return dataExtracao;
@@ -56,9 +55,7 @@ public class Processamento {
 
     @Override
     public String toString() {
-        return "Óbito [dataExtracao= " + dataExtracao + " Data do nascimento= " + dataNascimento + " Data do óbito= "
-                + dataObito + "\nObito prematuro= " + obitoPrematuro + "\nRaça= " + raca + " Sexo= " + sexo
-                + " Tipo do obito= " + tipoObito + "]\n";
+        return "\nÓbito [dataExtracao= " + dataExtracao + " Data do nascimento= " + dataNascimento + " Data do óbito= "+ dataObito + "\nObito prematuro= " + obitoPrematuro + "\nRaça= " + raca + " Sexo= " + sexo+ " Tipo do obito= " + tipoObito + "]";
     }
 
 
