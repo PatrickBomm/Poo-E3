@@ -69,10 +69,12 @@ public class App {
                 System.out.println(f.getName());
             }
         }
+        
+
         System.out.println("\nDigite o nome do arquivo: ");
 
         String path = sc.next();
-        path = "assets/" + path;
+        path = "assets/" + path + ".csv";
         // tenta ler o arquivo csv
         try (BufferedReader bReader = new BufferedReader(new FileReader(path))) {
             String linhaProcessamento = bReader.readLine();
@@ -122,7 +124,7 @@ public class App {
         int opc = sc.nextInt();
         switch (opc) {
         case 1:
-            System.out.println("Digite a data: ");
+            System.out.println("Digite a data: (mes-ano)");
             String dataNas = sc.next();
             for (Processamento p : process) {
                 if (dataNas.equals(p.getDataNascimento())) {

@@ -1,0 +1,7 @@
+{
+    "java.project.sourcePaths": [
+        "Trabalho Poo/src",
+        "src"
+    ],
+    "java.project.outputPath": "bin"
+}
