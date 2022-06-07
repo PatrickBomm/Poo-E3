@@ -1,12 +1,15 @@
 import java.io.*;
 import java.text.ParseException;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class App {
     static Scanner sc = new Scanner(System.in);
 
     static List<Processamento> process = new ArrayList<Processamento>();
     static List<Processamento> salvos = new ArrayList<Processamento>();
+    static List<String> aux = new ArrayList<>();
 
     public static void main(String[] args) throws IOException, ParseException {
         menu();
@@ -19,38 +22,90 @@ public class App {
             Scanner sc = new Scanner(System.in);
             System.out.println("\n>>>Menu Principal<<<");
             System.out.println(
-                    "Escolha a opção desejada:\n0- Sair.\n1- Carregar os dados.\n2- Apresentar os dados.\n3- Consultar por endereço.\n4- Salvar os dados da consulta.");
+                    "Escolha a opção desejada:\n0- Sair.\n1- Carregar os dados.\n2- Apresentar os dados.\n3- Consultar por endereço.\n4- Salvar os dados da consulta.\n5- Listar por ordem Decrescente ou Crescente.");
             int opc = sc.nextInt();
             switch (opc) {
-            case 0:
-                cond = false;
-                System.out.println("\n!!!Saindo!!!");
-                break;
-            case 1:
-                load();
-                break;
+                case 0:
+                    cond = false;
+                    System.out.println("\n!!!Saindo!!!");
+                    break;
+                case 1:
+                    load();
+                    break;
 
-            case 2:
-                if (process.size() > 0)
-                    System.out.println(process);
-                else
-                    System.out.println("\nNenhum dado foi carregado ainda!");
+                case 2:
+                    if (process.size() > 0)
+                        System.out.println(process);
+                    else
+                        System.out.println("\nNenhum dado foi carregado ainda!");
 
-                break;
+                    break;
 
-            case 3:
-                if (process.size() > 0)
-                    search();
-                else
-                    System.out.println("\nNenhum dado foi carregado ainda!");
-                break;
+                case 3:
+                    if (process.size() > 0)
+                        search();
+                    else
+                        System.out.println("\nNenhum dado foi carregado ainda!");
+                    break;
 
-            case 4:
-                if (process.size() > 0)
-                    gravarArquivo();
-                else
-                    System.out.println("\nNenhum dado foi carregado ainda!");
-                break;
+                case 4:
+                    if (process.size() > 0)
+                        gravarArquivo();
+                    else
+                        System.out.println("\nNenhum dado foi carregado ainda!");
+                    break;
+
+                case 5:
+
+                    ArrayList<Processamento> auxiliar = new ArrayList<>();
+
+                    System.out.println("\nEscolha a Ordem:\n1: Ordem Crescente.\n2: Ordem Decrescente.");
+                    int op = sc.nextInt();
+
+                    switch (op) {
+                        case 1:
+                        
+                            auxiliar.clear();
+
+                            Collections.sort(aux);
+                            for (int i = 0; i < aux.size(); i++) {
+                                for (Processamento p : process) {
+                                    if (aux.get(i).equals(p.getDataObito())) {
+                                        auxiliar.add(p);
+                                    }
+                                }
+                            }
+
+                            System.out.println(auxiliar.toString());
+                            break;
+
+                        case 2:
+                            
+                            auxiliar.clear();
+
+                            Collections.sort(aux);
+                            for (int i = 0; i < aux.size(); i++) {
+                                for (Processamento p : process) {
+                                    if (aux.get(i).equals(p.getDataObito())) {
+                                        auxiliar.add(p);
+                                    }
+                                }
+                            }
+
+                            Collections.reverse(auxiliar);
+                            System.out.println(auxiliar.toString());
+                            break;
+                            
+                            default:
+                            System.out.println("\nOpção Inválida!!");
+                            break;
+                    
+                        }
+
+                    break;
+                default:
+                    System.out.println("Opção inválida!");
+                    break;
 
             }
 
@@ -69,7 +124,6 @@ public class App {
                 System.out.println(f.getName());
             }
         }
-        
 
         System.out.println("\nDigite o nome do arquivo: ");
 
@@ -96,11 +150,30 @@ public class App {
 
                 // cria um objeto internacao para cada linha e informa os atributos acima no
                 // construtor (ver Processamento.java)
-                Processamento processamento = new Processamento(dataExtracao, dataObito, dataNascimento, sexo, raca,
+
+                String auxobito = "";
+
+                for (int i = 3; i <= 6; i++) {
+                    auxobito += dataObito.charAt(i);
+                } // 05/2011
+
+                String auxObito2 = "";
+                for (int i = 0; i <= 1; i++) {
+                    auxObito2 += dataObito.charAt(i);
+                }
+
+                String insertArray = auxobito + dataObito.charAt(2) + auxObito2;
+
+                if (!aux.contains(insertArray)) {
+                    aux.add(insertArray);
+                }
+
+                Processamento processamento = new Processamento(dataExtracao, insertArray, dataNascimento, sexo, raca,
                         obitoPrematuro, tipoObito);
 
                 // adiciona os objetos internao criados na lista de processamento
                 process.add(processamento);
+
                 linhaProcessamento = bReader.readLine();
 
             }
@@ -123,54 +196,54 @@ public class App {
                 "\nDigite o que deseja pesquisar:\n1- Data de nascimento.\n2- Data de óbito.\n3- Raça.\n4- Sexo.\n0- Voltar ");
         int opc = sc.nextInt();
         switch (opc) {
-        case 1:
-            System.out.println("Digite a data: (mes-ano)");
-            String dataNas = sc.next();
-            for (Processamento p : process) {
-                if (dataNas.equals(p.getDataNascimento())) {
-                    System.out.println(p);
-                    salvos.add(p);
+            case 1:
+                System.out.println("Digite a data: (Mes/Ano)");
+                String dataNas = sc.next();
+                for (Processamento p : process) {
+                    if (dataNas.equals(p.getDataNascimento())) {
+                        System.out.println(p);
+                        salvos.add(p);
+                    }
                 }
-            }
-            break;
-        case 2:
-            System.out.println("Digite a data: ");
-            String dataObi = sc.next();
-            for (Processamento p : process) {
-                if (dataObi.equals(p.getDataObito())) {
-                    System.out.println(p);
-                    salvos.add(p);
+                break;
+            case 2:
+                System.out.println("Digite a data: (Ano/Mes)");
+                String dataObi = sc.next();
+                for (Processamento p : process) {
+                    if (dataObi.equals(p.getDataObito())) {
+                        System.out.println(p);
+                        salvos.add(p);
+                    }
                 }
-            }
-            break;
+                break;
 
-        case 3:
-            System.out.println("Digite a raça:");
-            String raca = sc.next().toUpperCase();
-            for (Processamento p : process) {
-                if (raca.equals(p.getRaca())) {
-                    System.out.println(p);
-                    salvos.add(p);
+            case 3:
+                System.out.println("Digite a raça:");
+                String raca = sc.next().toUpperCase();
+                for (Processamento p : process) {
+                    if (raca.equals(p.getRaca())) {
+                        System.out.println(p);
+                        salvos.add(p);
+                    }
+
                 }
+                break;
 
-            }
-            break;
-
-        case 4:
-            System.out.println("Digite o sexo: ");
-            String sexo = sc.next().toUpperCase();
-            for (Processamento p : process) {
-                if (sexo.equals(p.getSexo())) {
-                    System.out.println(p);
-                    salvos.add(p);
+            case 4:
+                System.out.println("Digite o sexo: ");
+                String sexo = sc.next().toUpperCase();
+                for (Processamento p : process) {
+                    if (sexo.equals(p.getSexo())) {
+                        System.out.println(p);
+                        salvos.add(p);
+                    }
                 }
-            }
-            break;
+                break;
 
-        case 0:
-            System.out.println("Voltando ao menu principal!");
-            menu();
-            break;
+            case 0:
+                System.out.println("Voltando ao menu principal!");
+                menu();
+                break;
         }
 
     }
