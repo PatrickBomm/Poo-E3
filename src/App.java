@@ -125,7 +125,7 @@ public class App {
             }
         }
 
-        System.out.println("\nDigite o nome do arquivo: ");
+        System.out.println("\nDigite o nome do arquivo: (Sem 'assets/' e sem '.csv')");
 
         String path = sc.next();
         path = "assets/" + path + ".csv";
